@@ -8,6 +8,7 @@ const phoneError = document.getElementById('phoneError');
 const passwordError = document.getElementById('passwordError');
 const confirmError = document.getElementById('confirmError');
 const successMessage = document.getElementById('successMessage');
+const successText = document.getElementById('successText');
 
 const strengthBar = document.getElementById('strengthBar');
 const strengthLabel = document.getElementById('strengthLabel');
@@ -107,10 +108,34 @@ confirmInput.addEventListener('input', () => {
   updateSubmitButtonState();
 });
 
+let toastTimer;
+
+function showSuccessToast() {
+  successText.textContent = 'Регистрация прошла успешно!';
+  successMessage.classList.add('show');
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    successMessage.classList.remove('show');
+  }, 3500);
+}
+
+function resetForm() {
+  form.reset();
+  phoneError.textContent = '';
+  passwordError.textContent = '';
+  confirmError.textContent = '';
+  strengthBar.style.width = '0%';
+  strengthBar.style.background = '#e5484d';
+  strengthLabel.textContent = '';
+  updateSubmitButtonState();
+}
+
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   if (isFormValid()) {
-    successMessage.textContent = 'Регистрация прошла успешно!';
+    showSuccessToast();
+    resetForm();
   }
 });
 
