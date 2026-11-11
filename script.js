@@ -20,6 +20,21 @@ function validatePhone(value) {
   return isValidLength && startsCorrectly;
 }
 
+function formatPhone(digits) {
+  if (digits.length === 0) return '';
+  if (digits[0] === '8') digits = '7' + digits.slice(1);
+  if (digits[0] !== '7') digits = '7' + digits;
+  digits = digits.slice(0, 11);
+
+  const rest = digits.slice(1);
+  let result = '+7';
+  if (rest.length > 0) result += ' (' + rest.slice(0, 3);
+  if (rest.length > 3) result += ') ' + rest.slice(3, 6);
+  if (rest.length > 6) result += '-' + rest.slice(6, 8);
+  if (rest.length > 8) result += '-' + rest.slice(8, 10);
+  return result;
+}
+
 function getPasswordStrength(value) {
   if (value.length === 0) return 0;
 
@@ -66,8 +81,17 @@ function updateSubmitButtonState() {
   submitBtn.style.cursor = submitBtn.disabled ? 'not-allowed' : 'pointer';
 }
 
+phoneInput.addEventListener('focus', () => {
+  if (phoneInput.value.trim() === '') {
+    phoneInput.value = '+7';
+  }
+});
+
 phoneInput.addEventListener('input', () => {
-  if (phoneInput.value.length === 0) {
+  const digits = phoneInput.value.replace(/\D/g, '');
+  phoneInput.value = formatPhone(digits);
+
+  if (digits.length === 0 || digits.length < 11) {
     phoneError.textContent = '';
   } else if (!validatePhone(phoneInput.value)) {
     phoneError.textContent = 'Введите номер в формате +7XXXXXXXXXX (11 цифр)';
