@@ -12,6 +12,7 @@ const successText = document.getElementById('successText');
 
 const strengthBar = document.getElementById('strengthBar');
 const strengthLabel = document.getElementById('strengthLabel');
+const pashaPop = document.getElementById('pashaPop');
 
 function validatePhone(value) {
   const digitsOnly = value.replace(/\D/g, '');
@@ -133,6 +134,7 @@ confirmInput.addEventListener('input', () => {
 });
 
 let toastTimer;
+let pashaTimer;
 
 function showSuccessToast() {
   successText.textContent = 'Регистрация прошла успешно!';
@@ -142,6 +144,15 @@ function showSuccessToast() {
   toastTimer = setTimeout(() => {
     successMessage.classList.remove('show');
   }, 3500);
+}
+
+function showPasha() {
+  pashaPop.classList.add('show');
+
+  clearTimeout(pashaTimer);
+  pashaTimer = setTimeout(() => {
+    pashaPop.classList.remove('show');
+  }, 4500);
 }
 
 function resetForm() {
@@ -159,6 +170,7 @@ form.addEventListener('submit', (e) => {
   e.preventDefault();
   if (isFormValid()) {
     showSuccessToast();
+    showPasha();
     resetForm();
   }
 });
